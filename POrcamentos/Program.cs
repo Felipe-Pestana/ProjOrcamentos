@@ -79,7 +79,8 @@
         if (File.Exists(p))
         {
             StreamReader sr = new(p);
-            do
+            
+            while(!sr.EndOfStream)
             {
                 string[] quote = sr.ReadLine().Split(",");
                 string id = quote[0];
@@ -87,8 +88,8 @@
                 double v = double.Parse(quote[2]);
 
                 l.Add(new(id, d, v));
-            } while (!sr.EndOfStream);
-            sr.Close();
+            }
+            
             sr.Close();
         }
         else
