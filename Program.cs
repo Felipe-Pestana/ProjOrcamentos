@@ -11,7 +11,7 @@
         Console.WriteLine("[L]istar Orçamentos");
         Console.WriteLine("[A]provar Orçamento");
         Console.WriteLine("L[i]star Orçamentos Aprovados\n");
-        
+
         Console.WriteLine("[S]air do Programa");
 
         try
@@ -48,20 +48,20 @@
                 case 'l':
                     ListQuotations(quotations);
                     break;
-                
+
                 case 'a':
                     approvals = QuotationsForApproval(quotations);
                     break;
-                
+
                 case 'i':
                     ListQuotations(approvals);
                     break;
-                
+
                 case 's':
                     DumpToFile(quotations, path);
                     Environment.Exit(0);
                     break;
-                
+
                 default:
                     Console.WriteLine("Opção Inválida!");
                     Console.Beep();
@@ -120,32 +120,47 @@
     private static List<Quotes> QuotationsForApproval(List<Quotes> quotations)
     {
         List<Quotes> a = new();
-        foreach (var item in quotations)
+        if (quotations.Count == 0)
         {
-            Console.WriteLine(item.ToString());
-            System.Console.WriteLine("Deseja aprovar esta cotação? (S/N)");
-            char c = char.Parse(Console.ReadLine().ToLower());
-            if(c == 's'){
-                a.Add(item);
+            Console.WriteLine("Nenhum item na lista...");
+            Thread.Sleep(2000);
+        }
+        else
+        {
+            foreach (var item in quotations)
+            {
+                Console.WriteLine(item.ToString());
+                System.Console.WriteLine("Deseja aprovar esta cotação? (S/N)");
+                char c = char.Parse(Console.ReadLine().ToLower());
+                if (c == 's')
+                {
+                    a.Add(item);
+                }
+            }
+
+            for (int i = 0; i < quotations.Count; i++)
+            {
+                if (a[i].GetID == quotations[i].GetID)
+                    quotations.Remove(quotations[i]);
             }
         }
-
-        for(int i = 0; i < quotations.Count; i++)
-        {
-            if(a[i].GetID == quotations[i].GetID)
-                quotations.Remove(quotations[i]);
-        } 
         return a;
     }
 
     private static void ListQuotations(List<Quotes> l)
     {
-        foreach (var quote in l)
+        if (l.Count == 0)
+            Console.WriteLine("Lista Vazia...");
+        else
         {
-            Console.Clear();
-            Console.WriteLine(quote.ToString());
-            Console.Write("Pressione qualquer tecla para o próximo da lista...");
-            Console.ReadLine();
+            foreach (var quote in l)
+            {
+                Console.Clear();
+                Console.WriteLine(quote.ToString());
+                Console.Write("Pressione qualquer tecla para o próximo da lista...");
+                Console.ReadLine();
+            }
+            Console.WriteLine("Fim da Lista...");
         }
         Console.ReadLine();
     }
