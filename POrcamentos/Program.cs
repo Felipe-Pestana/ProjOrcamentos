@@ -10,7 +10,7 @@
         Console.WriteLine("[L]istar Orçamentos");
         Console.WriteLine("[A]provar Orçamento");
         Console.WriteLine("L[i]star Orçamentos Aprovados");
-        Console.WriteLine("[S]air Orçamento");
+        Console.WriteLine("[S]air do Programa");
 
         try
         {
@@ -33,8 +33,8 @@
         List<Quotes> quotations = new();
         List<Quotes> approvals = new();
 
-        LoadFromFile(quotesfile, quotations);
-        LoadFromFile(approvalsfile, approvals);
+        quotations = LoadFromFile(quotesfile, quotations);
+        approvals = LoadFromFile(approvalsfile, approvals);
 
 
         do
@@ -50,7 +50,7 @@
                     break;
 
                 case 'a':
-                    QuotationsForApproval(quotations);
+                    approvals = QuotationsForApproval(quotations);
                     break;
 
                 case 'i':
@@ -92,8 +92,9 @@
             sr.Close();
         }
         else
-            Console.WriteLine("Arquivo não encontrado!");
+            Console.WriteLine("Arquivo sendo criado...");
 
+        Thread.Sleep(2000);
         return l;
     }
 
@@ -109,7 +110,7 @@
         }
         catch (Exception e)
         {
-            p = p + "error.log";
+            p = "error.log";
             sw = new(p);
 
             sw.WriteLine(e.Message.ToString());
@@ -120,7 +121,6 @@
 
     private static List<Quotes> QuotationsForApproval(List<Quotes> quotations)
     {
-        //throw new NotImplementedException();
         List<Quotes> a = new();
 
         if (quotations.Count == 0)
@@ -133,7 +133,7 @@
             foreach (var item in quotations)
             {
                 Console.WriteLine(item.ToString());
-                System.Console.WriteLine("Deseja aprovar esta cotação? (S/N)");
+                Console.WriteLine("Deseja aprovar esta cotação? (S/N)");
                 char c = char.Parse(Console.ReadLine().ToLower());
                 if (c == 's')
                 {
@@ -141,11 +141,7 @@
                 }
             }
 
-            for (int i = 0; i < quotations.Count; i++)
-            {
-                if (a[i].GetID == quotations[i].GetID)
-                    quotations.Remove(quotations[i]);
-            }
+
         }
         return a;
     }
@@ -159,7 +155,7 @@
             Console.Write("Pressione qualquer tecla para o próximo da lista...");
             Console.ReadLine();
         }
-        Console.ReadLine();
+        //Console.ReadLine();
     }
 
     private static List<Quotes> CreateQuotations(List<Quotes> l)
@@ -168,9 +164,7 @@
         string d = Console.ReadLine();
         Console.WriteLine("Informe o Valor da Cotação: ");
         double v = double.Parse(Console.ReadLine());
-        Console.WriteLine("");
-
-        Quotes q = new(d, v);
+        
         l.Add(new(d, v));
 
         return l;
