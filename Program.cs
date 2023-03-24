@@ -10,7 +10,9 @@
         Console.WriteLine("[C]riar Orçamento");
         Console.WriteLine("[L]istar Orçamentos");
         Console.WriteLine("[A]provar Orçamento");
-        Console.WriteLine("[S]air Orçamento");
+        Console.WriteLine("L[i]star Orçamentos Aprovados\n");
+        
+        Console.WriteLine("[S]air do Programa");
 
         try
         {
@@ -27,8 +29,11 @@
     #endregion
     private static void Main(string[] args)
     {
-        string path = "quotes.dat";
         List<Quotes> quotations = new();
+        List<Quotes> approvals = new();
+
+        string path = "quotes.dat";
+
         LoadFromFile(path, quotations);
 
         #region SWITCHASE
@@ -39,16 +44,24 @@
                 case 'c':
                     quotations = CreateQuotations(quotations);
                     break;
+
                 case 'l':
                     ListQuotations(quotations);
                     break;
+                
                 case 'a':
-                    QuotationsForApproval();
+                    approvals = QuotationsForApproval(quotations);
                     break;
+                
+                case 'i':
+                    ListQuotations(approvals);
+                    break;
+                
                 case 's':
                     DumpToFile(quotations, path);
                     Environment.Exit(0);
                     break;
+                
                 default:
                     Console.WriteLine("Opção Inválida!");
                     Console.Beep();
@@ -61,7 +74,7 @@
 
     private static List<Quotes> LoadFromFile(string p, List<Quotes> l)
     {
-        
+
         if (File.Exists(p))
         {
             StreamReader sr = new(p);
@@ -104,9 +117,25 @@
         sw.Close();
     }
 
-    private static void QuotationsForApproval()
+    private static List<Quotes> QuotationsForApproval(List<Quotes> quotations)
     {
-        throw new NotImplementedException();
+        List<Quotes> a = new();
+        foreach (var item in quotations)
+        {
+            Console.WriteLine(item.ToString());
+            System.Console.WriteLine("Deseja aprovar esta cotação? (S/N)");
+            char c = char.Parse(Console.ReadLine().ToLower());
+            if(c == 's'){
+                a.Add(item);
+            }
+        }
+
+        for(int i = 0; i < quotations.Count; i++)
+        {
+            if(a[i].GetID == quotations[i].GetID)
+                quotations.Remove(quotations[i]);
+        } 
+        return a;
     }
 
     private static void ListQuotations(List<Quotes> l)

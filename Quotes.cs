@@ -25,9 +25,12 @@ internal class Quotes
     {
         return @"ID: " + this._id + "\nDescrição: " + this.Description + "\nValor: R$" + this.Value;
     }
-
     public string SaveToFile()
     {
         return this._id + "," + this.Description + "," + this.Value;
+    }
+
+    public string GetID(){
+        return this._id;
     }
 }
