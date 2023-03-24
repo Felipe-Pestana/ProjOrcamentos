@@ -50,7 +50,8 @@
                     break;
 
                 case 'a':
-                    approvals = QuotationsForApproval(quotations);
+                    approvals = QuotationsForApproval(quotations, approvals);
+                    quotations = UpdateQuotations(quotations, approvals);
                     break;
 
                 case 'i':
@@ -71,6 +72,16 @@
             }
         } while (true);
         
+    }
+
+    private static List<Quotes> UpdateQuotations(List<Quotes> quotations, List<Quotes> approvals)
+    {
+        foreach (var item in approvals)
+        {
+            quotations.Remove(item);
+        }
+
+        return quotations;
     }
 
     private static List<Quotes> LoadFromFile(string p, List<Quotes> l)
@@ -120,10 +131,9 @@
         sw.Close();
     }
 
-    private static List<Quotes> QuotationsForApproval(List<Quotes> quotations)
+    private static List<Quotes> QuotationsForApproval(List<Quotes> quotations, List<Quotes> approvals)
     {
-        List<Quotes> a = new();
-
+        
         if (quotations.Count == 0)
         {
             Console.WriteLine("Nenhum item na lista...");
@@ -138,13 +148,14 @@
                 char c = char.Parse(Console.ReadLine().ToLower());
                 if (c == 's')
                 {
-                    a.Add(item);
+                    approvals.Add(item);
+                    
                 }
             }
 
 
         }
-        return a;
+        return approvals;
     }
 
     private static void ListQuotations(List<Quotes> l)
